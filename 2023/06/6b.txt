@@ -1,0 +1,1 @@
+Just use 6a and modify the input file manually
