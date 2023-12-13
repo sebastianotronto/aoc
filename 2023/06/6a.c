@@ -1,3 +1,5 @@
+/* For part 2, use this code and change the input file */
+
 #include <inttypes.h>
 #include <math.h>
 #include <stdbool.h>
