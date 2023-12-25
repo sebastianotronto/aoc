@@ -1,7 +1,6 @@
 #include <inttypes.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #define N 100
@@ -95,7 +94,6 @@ int main() {
 	for (int i = 0; i < 1000; i++)
 		pushbutton();
 
-	printf("%" PRId64 " (%" PRId64 " low, %" PRId64 " hi)\n",
-	    hitot * lowtot, lowtot, hitot);
+	printf("%" PRId64 "\n", hitot * lowtot);
 	return 0;
 }

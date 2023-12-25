@@ -92,10 +92,6 @@ bool solvesystem(double A[D][D], double C[D], int d, double *X) {
 	return true;
 }
 
-bool equal(point_t p, point_t q) {
-	return EQ(p.x, q.x) && EQ(p.y, q.y) && EQ(p.z, q.z);
-}
-
 point_t pos(line_t l, double t) {
 	return (point_t) {
 	    .x = l.p.x + t*l.v.x,

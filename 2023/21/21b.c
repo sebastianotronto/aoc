@@ -14,11 +14,10 @@ and fuckyou2.png.
 #include <inttypes.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #define N 200
-#define S 202300L /* My input was 202300*131+65 */
+#define S 202300L
 
 char map[N][N];
 int64_t n;

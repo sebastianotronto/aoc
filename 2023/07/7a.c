@@ -11,18 +11,15 @@ int value[255] = {
 	['T'] = 10, ['J'] = 11, ['Q'] = 12, ['K'] = 13, ['A'] = 14
 };
 
-typedef struct {
-	char c[5];
-	int64_t b;
-} hand_t;
+typedef struct { char c[5]; int64_t b; } hand_t;
 
 int strength(hand_t h) {
 	int i, c2, c1, s, x[15];
 
 	memset(x, 0, 15 * sizeof(int));
 	for (i = 0, s = 0; i < 5; i++) {
-		s = s * 15 + value[h.c[i]];
-		x[value[h.c[i]]]++;
+		s = s * 15 + value[(int)h.c[i]];
+		x[value[(int)h.c[i]]]++;
 	}
 	for (i = 2, c1 = 0, c2 = 0; i < 15; i++) {
 		if (c1 < x[i]) {

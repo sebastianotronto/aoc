@@ -1,12 +1,9 @@
-#include <inttypes.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #define N 1500
 #define M 340
-#define MAX(x,y) ((x)>(y)?(x):(y))
 
 #define isnum(c) (c == '-' || (c >= '0' && c <= '9'))
 

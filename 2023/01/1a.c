@@ -9,8 +9,7 @@ int main() {
 	sum = 0;
 	while ((buf = fgets(line, N, stdin)) != NULL) {
 		for (first = -1; *buf; buf++) {
-			if (*buf < '0' || *buf > '9')
-				continue;
+			if (*buf < '0' || *buf > '9') continue;
 			first = first == -1 ? *buf - '0' : first;
 			last = *buf - '0';
 		}
