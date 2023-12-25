@@ -62,8 +62,8 @@ bool solvesystem(double A[D][D], double C[D], int d, double *X) {
 		int imax;
 		double maxi = 0.0;
 		for (int j = i; j < d; j++) {
-			if (A[j][i] > maxi) {
-				maxi = A[j][i];
+			if (ABS(A[j][i]) > maxi) {
+				maxi = ABS(A[j][i]);
 				imax = j;
 			}
 		}
