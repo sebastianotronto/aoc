@@ -1,18 +1,11 @@
-#include <inttypes.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #define N 1500
-#define M 15000
-#define MIN(x,y) ((x)<(y)?(x):(y))
 #define ischar(c) (c >= 'a' && c <= 'z')
 
-typedef struct {
-	int nout, out[N];
-	char s[4], outc[N][4];
-} node_t;
+typedef struct { int nout, out[N]; char s[4], outc[N][4]; } node_t;
 
 bool visited[N];
 char *buf, line[N][N];
@@ -90,6 +83,6 @@ int main() {
 	for (int t = 1; t < n; t++)
 		if (flowatmost(0, t, 3)) nother++;
 
-	printf("%d (%d %d)\n", nother * (n-nother), nother, n-nother);
+	printf("%d\n", nother * (n-nother));
 	return 0;
 }

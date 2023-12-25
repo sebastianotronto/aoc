@@ -1,14 +1,10 @@
-#include <inttypes.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define N 1000
 
-#define MAX(a,b) ((a)>(b)?(a):(b))
-#define MIN(a,b) ((a)<(b)?(a):(b))
-#define ABS(a) MAX((a),-(a))
+#define ABS(a) ((a)>0?(a):-(a))
 
 #define isnum(c) (c == '-' || (c >= '0' && c <= '9'))
 
@@ -16,7 +12,7 @@ char *buf, line[N];
 int s, n, a[N];
 
 int readl(int nums[], char *buf) {
-	int64_t i;
+	int i;
 	for (i = 0; *buf; buf++) {
 		if (!isnum(*buf)) continue;
 		nums[i++] = atoll(buf);

@@ -1,7 +1,4 @@
-#include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define N 1000
 #define set(i, j, c) if (newmap[i][j] == '.') newmap[i][j] = c;

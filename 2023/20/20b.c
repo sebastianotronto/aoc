@@ -1,7 +1,7 @@
 /*
-This one is a bit weird. This program works only for my specific input
-(included in this folder). Similarly to number 8, this program outputs
-4 numbers and you have to take the lcm of them.
+This one is a bit weird. This program works only for my specific input.
+Similarly to day 8, this program outputs 4 numbers and you have to
+take the lcm of them.
 
 I solved it this way:
 1. First, using a modified version of the code for part one (graph.c),
@@ -19,7 +19,6 @@ I solved it this way:
 #include <inttypes.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #define N 100
@@ -97,11 +96,9 @@ bool isclean(void) {
 }
 
 int64_t period(int node) {
-	int64_t npush = 0;
-	do {
+	int64_t npush;
+	for (npush = 0; npush == 0 || !isclean(); npush++)
 		sig(node, false);
-		npush++;
-	} while (!isclean());
 	return npush;
 }
 

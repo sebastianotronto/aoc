@@ -1,6 +1,7 @@
 /*
-I have lost my code for part one. It reused some stuff from day 10.
-This code can be adjusted to work for part one, just change the input reading.
+I have lost my code for part one. It reused some stuff from day
+10. This code can be adjusted to work for part one, just change the
+input reading part.
 */
 
 #include <inttypes.h>
@@ -57,10 +58,6 @@ int64_t overlaplen(int64_t a[], int64_t na, int64_t b[], int64_t nb) {
 	return ret;
 }
 
-int64_t linelen(int64_t a[], int64_t n) {
-	return overlaplen(a, n, a, n);
-}
-
 int main() {
 	p[n++] = (point_t) {0};
 	while ((buf = fgets(in, 50, stdin)) != NULL) {
@@ -80,7 +77,7 @@ int main() {
 		if (p[i].i != p[i+1].i) {
 			qsort(a, ia, sizeof(int64_t), &cmp_int64);
 			ia = removedoubles(a, ia);
-			t += linelen(a, ia) * (p[i+1].i - p[i].i + 1) -
+			t += overlaplen(a, ia, a, ia)*(p[i+1].i - p[i].i + 1) -
 			    overlaplen(a, ia, olda, nolda);
 			nolda = ia;
 			memcpy(olda, a, nolda * sizeof(int64_t));

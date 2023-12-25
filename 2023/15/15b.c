@@ -12,8 +12,7 @@ int main() {
 	for (b = line, c = 0; *b != '\n'; b++) {
 		switch (*b) {
 		case ',':
-			c = 0;
-			l = 0;
+			c = l = 0;
 			break;
 		case '=':
 			int64_t i;

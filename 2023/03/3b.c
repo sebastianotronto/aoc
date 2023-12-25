@@ -1,22 +1,16 @@
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define N 1000
-
-bool isnum(char c) { return c >= '0' && c <= '9'; }
+#define ISNUM(c) (c >= '0' && c <= '9')
 
 int grab(char *buf) {
-	int x;
-
-	if (!isnum(*buf))
-		return 0;
-
-	while (isnum(*buf)) buf--;
+	if (!ISNUM(*buf)) return 0;
+	while (ISNUM(*buf)) buf--;
 	buf++;
-	x = atoi(buf);
-	while (isnum(*buf)) *buf++ = '.';
+	int x = atoi(buf);
+	while (ISNUM(*buf)) *buf++ = '.';
 
 	return x;
 }

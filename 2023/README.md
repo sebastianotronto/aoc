@@ -8,7 +8,8 @@ send me an email and I'll be happy to explain!
 
 ## Instructions
 
-Compile with `-std=c99` and other required options, for example
+Compile with `-std=c99`. Day 6 requires also the `-lm` option to link with the
+math library, that is
 
 ```
 $ cc -std=c99 -lm 06/6a.c

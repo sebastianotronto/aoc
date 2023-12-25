@@ -1,30 +1,23 @@
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define N 1000
-
-bool isnum(char c) { return c >= '0' && c <= '9'; }
-bool issymbol(char c) { return c != '.' && c != 0 && c != '\n' && !isnum(c); }
+#define ISNUM(c) (c >= '0' && c <= '9')
+#define ISSYM(c) (c != '.' && c != 0 && c != '\n' && !ISNUM(c))
 
 int grab(char *buf) {
-	int x;
-
-	if (!isnum(*buf))
-		return 0;
-
-	while (isnum(*buf)) buf--;
+	if (!ISNUM(*buf)) return 0;
+	while (ISNUM(*buf)) buf--;
 	buf++;
-	x = atoi(buf);
-	while (isnum(*buf)) *buf++ = '.';
+	int x = atoi(buf);
+	while (ISNUM(*buf)) *buf++ = '.';
 
 	return x;
 }
 
 int main() {
 	char line[N], prev[N];
-	bool l, c, r, ul, uc, ur;
 	int i, sum;
 
 	sum = 0;
@@ -32,15 +25,10 @@ int main() {
 	memset(prev, '.', N);
 	while (fgets(&line[1], N-1, stdin) != NULL) {
 		for (i = 1; line[i]; i++) {
-			l = issymbol(line[i-1]);
-			c = issymbol(line[i]);
-			r = issymbol(line[i+1]);
-			ul = issymbol(prev[i-1]);
-			uc = issymbol(prev[i]);
-			ur = issymbol(prev[i+1]);
-			if (l || r || ul || uc || ur)
+			if (ISSYM(line[i-1]) || ISSYM(line[i+1]) ||
+			    ISSYM(prev[i-1]) || ISSYM(prev[i]) || ISSYM(prev[i+1]))
 				sum += grab(&line[i]);
-			if (l || c || r)
+			if (ISSYM(line[i-1]) || ISSYM(line[i]) || ISSYM(line[i+1]))
 				sum += grab(&prev[i]);
 		}
 		memcpy(prev, line, N);

@@ -1,7 +1,4 @@
-#include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define M 150
 #define MAXE 1000000

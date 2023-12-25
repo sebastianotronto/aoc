@@ -16,8 +16,7 @@ int main() {
 			for (j = 1; j < 10; j++)
 				if (!strncmp(buf, nums[j], strlen(nums[j])))
 					*buf = j + '0';
-			if (*buf < '0' || *buf > '9')
-				continue;
+			if (*buf < '0' || *buf > '9') continue;
 			first = first == -1 ? *buf - '0' : first;
 			last = *buf - '0';
 		}

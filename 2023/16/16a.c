@@ -1,7 +1,4 @@
-#include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define M 200
 
@@ -25,7 +22,7 @@ void walk(int i, int j, int d) {
 	if (!entered[i][j]) s++;
 	entered[i][j] |= d;
 	for (int k = 1; k <= 8; k <<= 1)
-		if (k & turn[d][map[i][j]])
+		if (k & turn[d][(int)map[i][j]])
 			walk(i+go[k][0], j+go[k][1], k);
 }
 

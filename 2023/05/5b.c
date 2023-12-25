@@ -1,17 +1,15 @@
 /* For part 2 we save ranges as (first, last) instead of (first, length) */
 
 #include <inttypes.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define N 10000
-
+#define ISNUM(c) (c >= '0' && c <= '9')
 #define MIN(a, b) ((a)<(b)?(a):(b))
 #define MAX(a, b) ((a)>(b)?(a):(b))
 
-bool isnum(char c) { return c >= '0' && c <= '9'; }
 
 void append(int64_t dst[][2], int64_t src[][2], int64_t *nr, int64_t *nnr) {
 	for (int i = 0; i < *nnr; i++) {
@@ -25,9 +23,9 @@ void append(int64_t dst[][2], int64_t src[][2], int64_t *nr, int64_t *nnr) {
 int64_t readl(int64_t nums[], char *buf) {
 	int64_t i;
 	for (i = 0; *buf; buf++) {
-		if (!isnum(*buf)) continue;
+		if (!ISNUM(*buf)) continue;
 		nums[i++] = atoll(buf);
-		while (isnum(*buf)) buf++;
+		while (ISNUM(*buf)) buf++;
 	}
 	return i;
 }
@@ -43,7 +41,7 @@ int main() {
 	}
 
 	for (nr = 0; (buf = fgets(line, N, stdin)) != NULL; ) {
-		if (!isnum(*buf)) {
+		if (!ISNUM(*buf)) {
 			append(range, next, &nr, &nnr);
 			continue;
 		}

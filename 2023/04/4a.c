@@ -1,11 +1,8 @@
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #define N 1000
-
-bool isnum(char c) { return c >= '0' && c <= '9'; }
+#define ISNUM(c) (c >= '0' && c <= '9')
 
 int main() {
 	char *buf, line[N];
@@ -17,15 +14,15 @@ int main() {
 		while (*buf != ':') buf++;
 		while (*buf != '|') {
 			buf++;
-			if (!isnum(*buf)) continue;
+			if (!ISNUM(*buf)) continue;
 			w[nw++] = atoi(buf);
-			while (isnum(*buf)) buf++;
+			while (ISNUM(*buf)) buf++;
 		}
 		while (*buf != '\n') {
 			buf++;
-			if (!isnum(*buf)) continue;
+			if (!ISNUM(*buf)) continue;
 			r[nr++] = atoi(buf);
-			while (isnum(*buf)) buf++;
+			while (ISNUM(*buf)) buf++;
 		}
 		for (x = 0, i = 0; i < nr; i++) {
 			for (j = 0; j < nw; j++) {
