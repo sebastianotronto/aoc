@@ -4,9 +4,12 @@ machine (ahah - doesn't work on my machine (: )
 However, with slightly different values for eps I got two answers whose
 difference was 4 and one was too high, the other too low. A quick binary
 search gave the correct result.
-I'll make a more stable version if I feel like it. EDIT: made slighly more
-numerically stable, now the result is actually correct (if rounded to the
-nearest integer).
+I'll make a more stable version if I feel like it.
+
+EDIT: made slighly more numerically stable, now the result is actually
+correct (if rounded to the nearest integer).
+
+EDIT: made numerical result even more accurate using long doubles.
 */
 
 #include <stdbool.h>
@@ -20,7 +23,8 @@ nearest integer).
 #define eps 1e-10
 #define EQ(x,y) (ABS((x)-(y))<eps*(ABS(x)+ABS(y)))
 
-typedef struct { double x, y, z; } point_t;
+typedef long double num_t;
+typedef struct { num_t x, y, z; } point_t;
 typedef struct { point_t p, v; } line_t;
 
 char *buf, line[N];
@@ -30,9 +34,9 @@ line_t l[N];
 bool isnum(char c) { return (c >= '0' && c <= '9') || c == '-'; }
 
 line_t readl(char *buf) {
-	double a[6];
+	num_t a[6];
 	for (int i = 0; i < 6; i++) {
-		a[i] = (double)atoll(buf);
+		a[i] = (num_t)atoll(buf);
 		while (isnum(*buf)) buf++;
 		while (*buf != '\n' && !isnum(*buf)) buf++;
 	}
@@ -42,25 +46,25 @@ line_t readl(char *buf) {
 	};
 }
 
-void swap(double *x, double *y) { double aux = *x; *x = *y; *y = aux; }
+void swap(num_t *x, num_t *y) { num_t aux = *x; *x = *y; *y = aux; }
 
-void printa(double A[D][D], double C[D], int d) {
+void printa(num_t A[D][D], num_t C[D], int d) {
 	for (int i = 0; i < d; i++) {
 		printf("[ ");
 		for (int j = 0; j < d; j++)
-			printf("%.2lf ", A[i][j]);
-		printf("]\t[%.2lf]\n", C[i]);
+			printf("%.2llf ", A[i][j]);
+		printf("]\t[%.2llf]\n", C[i]);
 	}
 }
 
 /* Solve the linear system AX = C with row reduction */
 /* Return true if it has a unique solution, false in any other case */
-bool solvesystem(double A[D][D], double C[D], int d, double *X) {
+bool solvesystem(num_t A[D][D], num_t C[D], int d, num_t *X) {
 	/* Row reduction */
 	for (int i = 0; i < d; i++) {
 		/* Make first nonzero */
 		int imax;
-		double maxi = 0.0;
+		num_t maxi = 0.0;
 		for (int j = i; j < d; j++) {
 			if (ABS(A[j][i]) > maxi) {
 				maxi = ABS(A[j][i]);
@@ -74,7 +78,7 @@ bool solvesystem(double A[D][D], double C[D], int d, double *X) {
 
 		/* Reduce rows */
 		for (int ii = i+1; ii < d; ii++) {
-			double r = A[ii][i] / A[i][i];
+			num_t r = A[ii][i] / A[i][i];
 			for (int k = i; k < d; k++)
 				A[ii][k] -= r*A[i][k];
 			C[ii] -= r*C[i];
@@ -92,7 +96,7 @@ bool solvesystem(double A[D][D], double C[D], int d, double *X) {
 	return true;
 }
 
-point_t pos(line_t l, double t) {
+point_t pos(line_t l, num_t t) {
 	return (point_t) {
 	    .x = l.p.x + t*l.v.x,
 	    .y = l.p.y + t*l.v.y,
@@ -102,7 +106,7 @@ point_t pos(line_t l, double t) {
 
 void testsolution(line_t sol) {
 	for (int i = 0; i < nlines; i++) {
-		double t = -1.0;
+		num_t t = -1.0;
 		if (!EQ(sol.v.x, l[i].v.x))
 			t = (sol.p.x-l[i].p.x)/(l[i].v.x-sol.v.x);
 		if (!EQ(sol.v.y, l[i].v.y))
@@ -111,8 +115,9 @@ void testsolution(line_t sol) {
 			t = (sol.p.z-l[i].p.z)/(l[i].v.z-sol.v.z);
 		point_t p1 = pos(sol, t), p2 = pos(l[i], t);
 		/*
-		printf("Line %d intersected at t = %.2lf "
-		       "in (%.2lf, %.2lf, %.2lf) and (%.2lf, %.2lf, %.2lf)\n",
+		printf("Line %d intersected at t = %.2llf in "
+		       "(%.2llf, %.2llf, %.2llf) and "
+		       "(%.2llf, %.2llf, %.2llf)\n",
 		       i, t, p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
 		*/
 		if (t < eps ||
@@ -152,7 +157,7 @@ int main() {
 	 * one can shuffle the input file until it works.
 	 */
 	int d = 6;
-	double A[D][D] = {
+	num_t A[D][D] = {
 		/* First equation: lines 0 and 1, x and y only */
 		{l[0].v.y-l[1].v.y, l[1].v.x-l[0].v.x, 0.0,
 		    l[1].p.y-l[0].p.y, l[0].p.x-l[1].p.x, 0.0},
@@ -172,7 +177,7 @@ int main() {
 		{0.0, l[0].v.z-l[2].v.z, l[2].v.y-l[0].v.y,
 		    0.0, l[2].p.z-l[0].p.z, l[0].p.y-l[2].p.y},
 	};
-	double C[D] = {
+	num_t C[D] = {
 		/* First equation: lines 0 and 1, x and y only */
 		l[1].p.y*l[1].v.x - l[1].p.x*l[1].v.y 
 		    - l[0].p.y*l[0].v.x + l[0].p.x*l[0].v.y,
@@ -192,7 +197,7 @@ int main() {
 		l[2].p.z*l[2].v.y - l[2].p.y*l[2].v.z 
 		    - l[0].p.z*l[0].v.y + l[0].p.y*l[0].v.z,
 	};
-	double X[d];
+	num_t X[d];
 	if (!solvesystem(A, C, d, X)) {
 		printf("No unique solution, shuffle input and try again.\n");
 		exit(1);
@@ -204,8 +209,8 @@ int main() {
 	};
 	testsolution(sol);
 
-	printf("p = (%.2lf, %.2lf, %.2lf), v = (%.2lf, %.2lf, %.2lf)\n",
+	printf("p = (%.2llf, %.2llf, %.2llf), v = (%.2llf, %.2llf, %.2llf)\n",
 	    sol.p.x, sol.p.y, sol.p.z, sol.v.x, sol.v.y, sol.v.z);
-	printf("%lf\n", sol.p.x + sol.p.y + sol.p.z);
+	printf("%llf\n", sol.p.x + sol.p.y + sol.p.z);
 	return 0;
 }
