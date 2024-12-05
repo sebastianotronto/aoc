@@ -7,7 +7,8 @@
 using namespace std;
 
 int main() {
-	while (cin >> TODO)
+	string line;
+	while (getline(cin, line))
 		;
 	return 0;
 }

@@ -5,3 +5,4 @@ List of things I learned (or refreshed) with this year's AoC.
 * Day 3: std::string_view
 * Day 4: nothing special, some practice with classic and a weird trick
   to assign two variables at once with a pair of references pair<int&, int&>
+* Day 5: std::find and std::replace
