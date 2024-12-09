@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
+#include <ranges>
 #include <set>
 #include <sstream>
 #include <string>
@@ -21,16 +22,16 @@ int main() {
 			a.push_back(id % 2 == 0 ? id/2 : -1); // -1 = space
 	}
 
-	for (int i = file.size()-1; i >= 0; i--) {
+	for (auto& p : file | views::reverse) {
 		for (auto& f : freesp) {
-			if (f.first >= file[i].first) break;
-			if (f.second >= file[i].second) {
-				for (int k = 0; k < file[i].second; k++) {
-					a[f.first+k] = a[file[i].first+k];
-					a[file[i].first+k] = -2;
+			if (f.first >= p.first) break;
+			if (f.second >= p.second) {
+				for (int k = 0; k < p.second; k++) {
+					a[f.first+k] = a[p.first+k];
+					a[p.first+k] = -2;
 				}
-				f.first += file[i].second;
-				f.second -= file[i].second;
+				f.first += p.second;
+				f.second -= p.second;
 				break;
 			}
 		}

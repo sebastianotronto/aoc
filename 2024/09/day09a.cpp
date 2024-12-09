@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
+#include <ranges>
 #include <set>
 #include <sstream>
 #include <string>
@@ -16,11 +17,11 @@ int main() {
 			a.push_back(id % 2 == 0 ? id/2 : -1); // -1 = space
 
 	int j = 0;
-	for (int i = a.size()-1; i >= 0; i--) {
+	for (auto& x : a | views::reverse) {
 		while (a[j] >= 0) j++;
 		if (a[j] == -2) break;
-		a[j] = a[i];
-		a[i] = -2; // -2 = freed up
+		a[j] = x;
+		x = -2; // -2 = freed up
 	}
 
 	long long checksum = 0;

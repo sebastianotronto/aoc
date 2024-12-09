@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
+#include <ranges>
 #include <set>
 #include <sstream>
 #include <string>
