@@ -8,3 +8,4 @@ List of things I learned (or refreshed) with this year's AoC.
 * Day 5: std::find and std::replace
 * Day 8: set::insert_range(), but it is from C++23 only
 * Day 9: std::views
+* Day 11: if(init; cond)
