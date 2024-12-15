@@ -49,7 +49,7 @@ public:
 		cells = new char[M * N];
 		for (int i = 0; i < N; i++)
 			for (int j = 0; j < M; j++)
-				cells[N*i + j] = j < (int)lines[i].size() ?
+				cells[M*i + j] = j < (int)lines[i].size() ?
 				    lines[i][j] : out_of_bound;
 	}
 
@@ -73,7 +73,7 @@ private:
 		auto [i, j] = p;
 		if (i >= N || i < 0 || j >= M || j < 0)
 			return out_of_bound;
-		return cells[N*i + j];
+		return cells[M*i + j];
 	}
 };
 

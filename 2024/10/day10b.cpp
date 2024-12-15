@@ -42,7 +42,7 @@ public:
 		cells = new int[M * N];
 		for (int i = 0; i < N; i++)
 			for (int j = 0; j < M; j++)
-				cells[N*i + j] = lines[i][j] - '0';
+				cells[M*i + j] = lines[i][j] - '0';
 	}
 
 	~Board() {
@@ -59,7 +59,7 @@ private:
 
 	int coord(pair<int, int> p) {
 		auto [i, j] = p;
-		return i >= N || i < 0 || j >= M || j < 0 ? -1 : N*i + j;
+		return i >= N || i < 0 || j >= M || j < 0 ? -1 : M*i + j;
 	}
 };
 

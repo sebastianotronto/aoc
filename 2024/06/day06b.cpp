@@ -62,9 +62,9 @@ public:
 		visited = new int[M * N];
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
-				cells[N*i + j] = j < (int)lines[i].size() ?
+				cells[M*i + j] = j < (int)lines[i].size() ?
 				    lines[i][j] : out_of_bound;
-				visited[N*i + j] = 0;
+				visited[M*i + j] = 0;
 			}
 		}
 	}
@@ -111,7 +111,7 @@ private:
 
 	int coord(pair<int, int> p) {
 		auto [i, j] = p;
-		return i >= N || i < 0 || j >= M || j < 0 ? -1 : N*i + j;
+		return i >= N || i < 0 || j >= M || j < 0 ? -1 : M*i + j;
 	}
 
 	void set_cell(pair<int, int> p, char c) {

@@ -46,8 +46,8 @@ public:
 		cells = new char[M * N];
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
-				region[N*i + j] = -1;
-				cells[N*i + j] = j < (int)lines[i].size() ?
+				region[M*i + j] = -1;
+				cells[M*i + j] = j < (int)lines[i].size() ?
 				    lines[i][j] : out_of_bound;
 			}
 		}
@@ -74,7 +74,7 @@ private:
 
 	int coord(pair<int, int> p) {
 		auto [i, j] = p;
-		return i >= N || i < 0 || j >= M || j < 0 ? -1 : N*i + j;
+		return i >= N || i < 0 || j >= M || j < 0 ? -1 : M*i + j;
 	}
 };
 
