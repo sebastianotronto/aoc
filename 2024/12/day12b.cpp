@@ -57,8 +57,8 @@ public:
 	{
 		for (int64_t i = 0; i < N; i++) {
 			for (int64_t j = 0; j < M; j++) {
-				region[N*i+j] = -1;
-				cells[N*i+j] = lines[i][j];
+				region[M*i+j] = -1;
+				cells[M*i+j] = lines[i][j];
 			}
 		}
 	}
@@ -107,7 +107,7 @@ private:
 
 	int64_t coord(const Position p) const {
 		auto [i, j] = p;
-		return i >= N || i < 0 || j >= M || j < 0 ? -1 : N * i + j;
+		return i >= N || i < 0 || j >= M || j < 0 ? -1 : M * i + j;
 	}
 
 	bool is_visited(const Position p, const Direction d) const {
