@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <iostream>
 #include <map>
+#include <queue>
 #include <ranges>
 #include <set>
 #include <sstream>
