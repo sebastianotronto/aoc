@@ -1,0 +1,41 @@
+start:
+2 4 // B = A % 8
+1 5 // B = B ^ 5
+7 5 // C = A >> B
+1 6 // B = B ^ 6
+4 1 // B = B ^ C
+5 5 // print B % 8
+0 3 // A = A >> 3
+3 0 // If A != 0 goto start
+
+for (A = a; A != 0; A >> 3) {
+	B1 = (A % 8) ^ 5;
+	C = A >> B1;
+	B2 = (B1 ^ 6) ^ C;
+	print(B2 % 8);
+}
+
+Goal: Find A such that one iteration prints x and leaves A = a
+Going backwards:
+A >> 3 = a -> A = 8a + Y
+B2 = x
+B1 = (A % 8) ^ 5 = Y^5
+x = (B1 ^ 6) ^ (A >> B1) = (Y^5 ^ 6) ^ (A >> Y^5)
+  = (Y ^ 3) ^ (A >> Y^5)
+-> x ^ (Y^3) = A >> Y^5
+-> A = ((a^Y^3) << Y^5) + Z for some Z < Y^5 < 8
+
+At the last iteartion, x = 0 and a = 0 so:
+-> A = Y
+-> x = (Y^3) ^ (Y >> Y^5)
+
+Y = 0 => x = 3
+Y = 1 => x = 2 ^ (1 >> 4) = 2
+Y = 2 => x = 1 ^ (2 >> 7) = 1
+Y = 3 => x = 0 ^ (3 >> 2) = 0
+
+=> A = Y = 3
+
+Second to last, x = 3 and a = 3, so
+-> A = 24 + Y
+3 = (A - 24) ^ 3 ^ ((A-24) >> (A-24)^5)
