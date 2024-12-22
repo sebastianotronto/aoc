@@ -11,31 +11,10 @@
 #include <vector>
 using namespace std;
 
-class Seq {
-public:
-	int64_t k;
-
-	Seq() : k{0} {}
-
-	Seq(int kk) : k{kk} {}
-	
-	Seq(int64_t a, int64_t b, int64_t c, int64_t d)
-	    : k{(a+9)+19*((b+9)+19*((c+9)+19*(d+9)))} {}
-
-	Seq(const vector<pair<int, int>>& v, int i)
-	    : Seq(v[i-3].second, v[i-2].second, v[i-1].second, v[i].second) {}
-
-	int64_t operator[](int64_t i) const {
-		int64_t d;
-		for (d = k; i > 0; i--)
-			d /= 19;
-		return (d % 19) - 9;
-	}
-
-	bool step() {
-		return (++k) < 19*19*19*19;
-	}
-};
+int64_t Seq(const vector<pair<int, int>>& v, int i) {
+    return (v[i-3].second+9) + 19*((v[i-2].second+9) +
+	   19*((v[i-1].second+9) + 19*(v[i].second+9)));
+}
 
 int64_t next(int64_t n) {
 	constexpr int64_t M = 16777216;
@@ -60,7 +39,7 @@ int main() {
 			spc[i].push_back({t%10, t%10 - s%10});
 			s = t;
 			if (j >= 3) {
-				auto k = Seq(spc[i], j).k;
+				auto k = Seq(spc[i], j);
 				seqs.insert(k);
 				if (tt[i].count(k) == 0)
 					tt[i][k] = spc[i][j].first;
@@ -68,13 +47,11 @@ int main() {
 		}
 	}
 
-	Seq seq;
 	int64_t best = 0;
 	for (auto k : seqs) {
-		Seq seq(k);
 		int64_t tot = 0;
 		for (unsigned i = 0; i < spc.size(); i++)
-			tot += tt[i][seq.k];
+			tot += tt[i][k];
 		best = max(best, tot);
 	};
 
