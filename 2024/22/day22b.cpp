@@ -11,9 +11,8 @@
 #include <vector>
 using namespace std;
 
-int64_t Seq(const vector<pair<int, int>>& v, int i) {
-    return (v[i-3].second+9) + 19*((v[i-2].second+9) +
-	   19*((v[i-1].second+9) + 19*(v[i].second+9)));
+int64_t Seq(int64_t a, int64_t b, int64_t c, int64_t d) {
+    return (a+9) + 19*((b+9) + 19*((c+9) + 19*(d+9)));
 }
 
 int64_t next(int64_t n) {
@@ -26,31 +25,28 @@ int64_t next(int64_t n) {
 
 int main() {
 	int64_t s;
-	vector<vector<pair<int, int>>> spc;
-	vector<map<int64_t, int64_t>> tt;
 	map<int64_t, int64_t> sums;
-	set<int64_t> seqs;
 
 	for (int i = 0; cin >> s; i++) {
-		spc.push_back(vector<pair<int, int>>());
-		tt.push_back(map<int64_t, int64_t>());
+		int64_t a, b, c, d;
+		set<int64_t> tt;
 
 		for (int j = 0; j < 2000; j++) {
-			int64_t t = next(s);
-			spc[i].push_back({t%10, t%10 - s%10});
-			s = t;
+			a = b;
+			b = c;
+			c = d;
+			d = -(s%10);
+			s = next(s);
+			d += s%10;
 			if (j >= 3) {
-				auto k = Seq(spc[i], j);
-				seqs.insert(k);
-				if (tt[i].count(k) == 0)
-					tt[i][k] = spc[i][j].first;
+				auto k = Seq(a, b, c, d);
+				if (!tt.contains(k)) {
+					tt.insert(k);
+					sums[k] += s%10;
+				}
 			}
 		}
 	}
-
-	for (unsigned i = 0; i < spc.size(); i++)
-		for (auto [k, v] : tt[i])
-			sums[k] += v;
 
 	auto values = views::values(sums);
 	auto best = *max_element(values.begin(), values.end());
