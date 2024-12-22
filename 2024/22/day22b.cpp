@@ -28,6 +28,7 @@ int main() {
 	int64_t s;
 	vector<vector<pair<int, int>>> spc;
 	vector<map<int64_t, int64_t>> tt;
+	map<int64_t, int64_t> sums;
 	set<int64_t> seqs;
 
 	for (int i = 0; cin >> s; i++) {
@@ -47,14 +48,12 @@ int main() {
 		}
 	}
 
-	int64_t best = 0;
-	for (auto k : seqs) {
-		int64_t tot = 0;
-		for (unsigned i = 0; i < spc.size(); i++)
-			tot += tt[i][k];
-		best = max(best, tot);
-	};
+	for (unsigned i = 0; i < spc.size(); i++)
+		for (auto [k, v] : tt[i])
+			sums[k] += v;
 
+	auto values = views::values(sums);
+	auto best = *max_element(values.begin(), values.end());
 	cout << best << endl;
 
 	return 0;
