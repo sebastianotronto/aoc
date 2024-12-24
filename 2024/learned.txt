@@ -11,3 +11,4 @@ List of things I learned (or refreshed) with this year's AoC.
 * Day 11: if(init; cond)
 * Day 19: more practice with std::string_view for constant string
 * Day 22: std::views::values for map (and keys)
+* Day 24: std::fill
