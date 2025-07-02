@@ -9,4 +9,4 @@ usage() {
 [ -d "$1" ]  || (echo "Directory $1 does not exist"; exit 1)
 [ -f "$1/$2.rs" ] || (echo "File $1/$2.rs does not exist"; exit 2)
 
-rustc "$1/$2.rs" -o "$1/$2.out" && time "./$1/$2.out"
+rustc -O "$1/$2.rs" -o "$1/$2.out" && time RUST_BACKTRACE=1 "./$1/$2.out"
