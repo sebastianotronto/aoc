@@ -10,14 +10,16 @@ struct Node {
 
 #[derive(Debug, Copy, Clone)]
 struct MapState {
+    max_pos: usize,
     valves: usize,
-    pos_ind: usize,
-    max_pos: usize
+    pub pos: usize
 }
 
 #[derive(Debug, Clone)]
 struct Map {
     index: HashMap<u16, usize>,
+    state_index: HashMap<u16, usize>,
+    pressure: Vec<usize>,
     nodes: Vec<Node>
 }
 
@@ -44,9 +46,34 @@ impl Node {
     }
 }
 
+impl MapState {
+    fn from_usize(i: usize, map: &Map) -> MapState {
+        let max_pos = map.index.len();
+        MapState {
+            max_pos,
+            valves: i / max_pos,
+            pos: i % max_pos
+        }
+    }
+
+    fn to_usize(&self) -> usize {
+        self.max_pos * self.valves + self.pos
+    }
+
+    fn get_valve(&self, i: usize) -> bool {
+        self.valves & (1 << i) != 0
+    }
+
+    fn toggle_valve(&mut self, i: usize) {
+        self.valves ^= 1 << i;
+    }
+}
+
 impl Map {
     fn from_stdin() -> Map {
         let mut line = String::new();
+
+        // Get the nodes
         let mut nodes = Vec::<Node>::new();
         while std::io::stdin().read_line(&mut line).unwrap() > 0 {
             let node = Node::from_line(&line);
@@ -58,78 +85,81 @@ impl Map {
             }
             line.clear();
         }
-        let index = nodes.iter()
-            .enumerate()
-            .map(|(i, n)| (n.name, i))
-            .collect::<HashMap<_, _>>();
-        Map { index, nodes }
+
+        // Compute the node-name-to-index tables
+        let mut j = 0;
+        let mut index = HashMap::<u16, usize>::new();
+        let mut state_index = HashMap::<u16, usize>::new();
+        let mut pressure = vec![0];
+        for i in 0..nodes.len() {
+            index.insert(nodes[i].name, i);
+            if nodes[i].rate != 0 {
+                state_index.insert(nodes[i].name, j);
+                j += 1;
+
+                // Pre-compute flow rate for all states with node[i] turned on
+                for k in 0..pressure.len() {
+                    pressure.push(pressure[k] + nodes[i].rate);
+                }
+            }
+        }
+
+        Map { index, state_index, pressure, nodes }
     }
 
     fn state_max(&self) -> usize {
-        let mut i: usize = 0;
-        let mut tot: usize = 0;
-        for n in &self.nodes {
-            if n.rate == 0 { continue; }
-            tot += 1 << i;
-            i += 1;
-        }
-        let len = self.nodes.len();
-        tot * len + len
-    }
-
-    fn released_pressure(&self) -> usize {
-        self.nodes.iter()
-            .map(|n| if n.valve_on { n.rate } else { 0 })
-            .sum()
+        self.index.len() * (1 << self.state_index.len())
     }
 
     fn most_pressure(&self, minutes: usize) -> usize {
         let n = self.state_max();
         let mut t = vec![0 as usize; n];
         let mut u = vec![0 as usize; n];
-        let mut map = self.clone();
 
         // Setup table for last minute
         for s in 0..n {
-            map.set_state(s);
-            t[s] = map.released_pressure();
+            t[s] = self.pressure[MapState::from_usize(s, self).valves];
+            u[s] = t[s];
         }
 
         // Dynamic programming counting back to 0 minutes
-        for i in (0..minutes).rev() {
+        for i in 0..minutes-1 {
             // Double buffer technique so we don't have to swap vectors
-            let (current, next) = if i % 2 == minutes % 2 {
-                (&mut t, &mut u)
+            let (current, next) = if i % 2 == 0 {
+                (&mut t, &u)
             } else {
-                (&mut u, &mut t)
+                (&mut u, &t)
             };
             for s in 0..n {
-                map.set_state(s);
-                let pos = map.pos;
+                let mut state = MapState::from_usize(s, self);
                 let mut k = 0;
-                let ind = map.index[&pos];
-                let p = map.released_pressure();
+                let ind = self.index[&self.nodes[state.pos].name];
+                let p = self.pressure[state.valves];
 
                 // Try turning on the valve
-                if map.nodes[ind].rate > 0 && !map.nodes[ind].valve_on {
-                    map.nodes[ind].valve_on = true;
-                    k = max(k, p + next[map.get_state()]);
-                    map.nodes[ind].valve_on = false;
+                if self.nodes[ind].rate > 0 {
+                    let si = self.state_index[&self.nodes[ind].name];
+                    if !state.get_valve(si) {
+                        state.toggle_valve(si);
+                        k = max(k, p + next[state.to_usize()]);
+                        state.toggle_valve(si);
+                    }
                 }
 
                 // Try moving to a neighbor
-                for v in &map.nodes[ind].neighbors {
-                    map.pos = *v;
-                    k = max(k, p + next[map.get_state()]);
+                for v in &self.nodes[ind].neighbors {
+                    state.pos = self.index[v];
+                    k = max(k, p + next[state.to_usize()]);
                 }
                 current[s] = k;
             }
         }
-        if 0 == minutes % 2 { t[0] } else { u[0] }
+        if 0 == minutes % 2 { t[0] } else { u[0] } // Initial state = 0
     }
 }
 
 fn main() {
     let map = Map::from_stdin();
-    println!("{}", map.most_pressure(29));
+    let result = map.most_pressure(30);
+    println!("{result}");
 }
