@@ -8,7 +8,7 @@ fn main() {
     let mut i = 1;
     let mut sum = 0;
     for bp in read_blueprints_from_stdin() {
-        let mg = most_geodes(&bp, Status::new(), MINUTES, &mut mem);
+        let mg = most_geodes(&bp, Status::new(), MINUTES, &mut mem, 0);
         println!("{i}: {mg}");
         sum += i * mg;
         mem.clear();

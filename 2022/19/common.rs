@@ -122,47 +122,59 @@ pub fn most_geodes(
     bp: &Blueprint,
     s: Status,
     m: i32,
-    mem: &mut HashMap<(Status, i32), i32>
+    mem: &mut HashMap<(Status, i32), i32>,
+    lower_bound: i32
 ) -> i32 {
-    if let Some(r) = mem.get(&(s, m)) { return *r; }
     if m == 0 { return s.resources.geo; }
+    if m == 1 { return s.resources.geo + s.bots.geo; }
+
+    // Estimate how much we can get at most, assuming one geode bot
+    // can be built each turn from now on
+    let upper_bound = s.resources.geo + s.bots.geo + (m-1)*(m-2)/2;
+    if upper_bound <= lower_bound { return 0; }
+
+    if let Some(r) = mem.get(&(s, m)) { return *r; }
 
     let mut new_status = s;
     new_status.resources += &new_status.bots;
 
-    let mut result = most_geodes(bp, new_status, m-1, mem);
+    let mut result = 0;
 
-    if m > 4 && s.resources >= bp.ore_bot_cost {
-        new_status.resources -= &bp.ore_bot_cost;
-        new_status.bots.ore += 1;
-        result = max(result, most_geodes(bp, new_status, m-1, mem));
-        new_status.bots.ore -= 1;
-        new_status.resources += &bp.ore_bot_cost;
-    }
+    if m > 1 && s.resources >= bp.geo_bot_cost {
+        new_status.resources -= &bp.geo_bot_cost;
+        new_status.bots.geo += 1;
+        result = most_geodes(bp, new_status, m-1, mem, result);
 
-    if m > 3 && s.resources >= bp.cla_bot_cost {
-        new_status.resources -= &bp.cla_bot_cost;
-        new_status.bots.cla += 1;
-        result = max(result, most_geodes(bp, new_status, m-1, mem));
-        new_status.bots.cla -= 1;
-        new_status.resources += &bp.cla_bot_cost;
+        // If a geode bot can be built, it is always the best thing to do
+        mem.insert((s, m), result);
+        return result;
     }
 
     if m > 2 && s.resources >= bp.obs_bot_cost {
         new_status.resources -= &bp.obs_bot_cost;
         new_status.bots.obs += 1;
-        result = max(result, most_geodes(bp, new_status, m-1, mem));
+        result = max(result, most_geodes(bp, new_status, m-1, mem, result));
         new_status.bots.obs -= 1;
         new_status.resources += &bp.obs_bot_cost;
     }
 
-    if m > 1 && s.resources >= bp.geo_bot_cost {
-        new_status.resources -= &bp.geo_bot_cost;
-        new_status.bots.geo += 1;
-        result = max(result, most_geodes(bp, new_status, m-1, mem));
-        new_status.bots.geo -= 1;
-        new_status.resources += &bp.geo_bot_cost;
+    if m > 3 && s.resources >= bp.cla_bot_cost {
+        new_status.resources -= &bp.cla_bot_cost;
+        new_status.bots.cla += 1;
+        result = max(result, most_geodes(bp, new_status, m-1, mem, result));
+        new_status.bots.cla -= 1;
+        new_status.resources += &bp.cla_bot_cost;
     }
+
+    if m > 4 && s.resources >= bp.ore_bot_cost {
+        new_status.resources -= &bp.ore_bot_cost;
+        new_status.bots.ore += 1;
+        result = max(result, most_geodes(bp, new_status, m-1, mem, result));
+        new_status.bots.ore -= 1;
+        new_status.resources += &bp.ore_bot_cost;
+    }
+
+    result = max(result, most_geodes(bp, new_status, m-1, mem, result));
 
     mem.insert((s, m), result);
     result
