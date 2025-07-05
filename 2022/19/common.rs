@@ -9,14 +9,12 @@ use std::collections::HashMap;
 pub struct Stock {
     pub ore: i32,
     pub cla: i32,
-    pub obs: i32,
-    pub geo: i32
+    pub obs: i32
 }
 
 impl Stock {
     pub fn all_lower(&self, other: &Self) -> bool {
-        self.ore <= other.ore && self.cla <= other.cla &&
-        self.obs <= other.obs && self.geo <= other.geo
+        self.ore <= other.ore && self.cla <= other.cla && self.obs <= other.obs
     }
 }
 
@@ -34,7 +32,6 @@ impl AddAssign<&Stock> for Stock {
         self.ore += other.ore;
         self.cla += other.cla;
         self.obs += other.obs;
-        self.geo += other.geo;
     }
 }
 
@@ -43,7 +40,6 @@ impl SubAssign<&Stock> for Stock {
         self.ore -= other.ore;
         self.cla -= other.cla;
         self.obs -= other.obs;
-        self.geo -= other.geo;
     }
 }
 
@@ -56,8 +52,8 @@ pub struct Status {
 impl Status {
     pub fn new() -> Status {
         Status {
-            bots: Stock { ore: 1, cla: 0, obs: 0, geo: 0 },
-            resources: Stock { ore: 0, cla: 0, obs: 0, geo: 0 }
+            bots: Stock { ore: 1, cla: 0, obs: 0 },
+            resources: Stock { ore: 0, cla: 0, obs: 0 }
         }
     }
 }
@@ -93,16 +89,16 @@ impl Blueprint {
         let mut i = 0;
 
         let ore = Blueprint::parse_one_resource(&line, &mut i);
-        let ore_bot_cost = Stock { ore, cla: 0, obs: 0, geo: 0 };
+        let ore_bot_cost = Stock { ore, cla: 0, obs: 0 };
 
         let ore = Blueprint::parse_one_resource(&line, &mut i);
-        let cla_bot_cost = Stock { ore, cla: 0, obs: 0, geo: 0 };
+        let cla_bot_cost = Stock { ore, cla: 0, obs: 0 };
 
         let (ore, cla) = Blueprint::parse_two_resources(&line, &mut i);
-        let obs_bot_cost = Stock { ore, cla, obs: 0, geo: 0 };
+        let obs_bot_cost = Stock { ore, cla, obs: 0 };
 
         let (ore, obs) = Blueprint::parse_two_resources(&line, &mut i);
-        let geo_bot_cost = Stock { ore, cla: 0, obs, geo: 0 };
+        let geo_bot_cost = Stock { ore, cla: 0, obs };
 
         Blueprint { ore_bot_cost, cla_bot_cost, obs_bot_cost, geo_bot_cost }
     }
@@ -124,27 +120,28 @@ pub fn most_geodes(
     m: i32,
     mem: &mut HashMap<(Status, i32), i32>
 ) -> i32 {
-    if m == 0 { return s.resources.geo; }
-    if m == 1 { return s.resources.geo + s.bots.geo; }
+    if m <= 1 { return 0; }
 
     if let Some(r) = mem.get(&(s, m)) { return *r; }
 
     let mut new_status = s;
     new_status.resources += &new_status.bots;
 
-    let mut result = 0;
-
+    // If a geode bot can be built, it is always the best thing to do
     if m > 1 && s.resources >= bp.geo_bot_cost {
         new_status.resources -= &bp.geo_bot_cost;
-        new_status.bots.geo += 1;
-        result = most_geodes(bp, new_status, m-1, mem);
-
-        // If a geode bot can be built, it is always the best thing to do
+        let result = m - 1 + most_geodes(bp, new_status, m-1, mem);
         mem.insert((s, m), result);
         return result;
     }
 
-    if m > 2 && s.resources >= bp.obs_bot_cost {
+    let mut result = 0;
+
+    let can_obs = s.resources >= bp.obs_bot_cost;
+    let can_cla = s.resources >= bp.cla_bot_cost;
+    let can_ore = s.resources >= bp.ore_bot_cost;
+
+    if m > 2 && can_obs {
         new_status.resources -= &bp.obs_bot_cost;
         new_status.bots.obs += 1;
         result = max(result, most_geodes(bp, new_status, m-1, mem));
@@ -152,7 +149,7 @@ pub fn most_geodes(
         new_status.resources += &bp.obs_bot_cost;
     }
 
-    if m > 3 && s.resources >= bp.cla_bot_cost {
+    if m > 3 && can_cla {
         new_status.resources -= &bp.cla_bot_cost;
         new_status.bots.cla += 1;
         result = max(result, most_geodes(bp, new_status, m-1, mem));
@@ -160,7 +157,7 @@ pub fn most_geodes(
         new_status.resources += &bp.cla_bot_cost;
     }
 
-    if m > 4 && s.resources >= bp.ore_bot_cost {
+    if m > 4 && can_ore {
         new_status.resources -= &bp.ore_bot_cost;
         new_status.bots.ore += 1;
         result = max(result, most_geodes(bp, new_status, m-1, mem));
@@ -168,7 +165,9 @@ pub fn most_geodes(
         new_status.resources += &bp.ore_bot_cost;
     }
 
-    result = max(result, most_geodes(bp, new_status, m-1, mem));
+    if !can_obs || !can_cla || !can_ore {
+        result = max(result, most_geodes(bp, new_status, m-1, mem));
+    }
 
     mem.insert((s, m), result);
     result
