@@ -116,22 +116,22 @@ pub fn read_blueprints_from_stdin() -> Vec<Blueprint> {
 
 pub fn most_geodes(
     bp: &Blueprint,
-    s: Status,
+    s: &Status,
     m: i32,
     mem: &mut HashMap<(Status, i32), i32>
 ) -> i32 {
     if m <= 1 { return 0; }
 
-    if let Some(r) = mem.get(&(s, m)) { return *r; }
+    if let Some(r) = mem.get(&(s.clone(), m)) { return *r; }
 
-    let mut new_status = s;
+    let mut new_status = s.clone();
     new_status.resources += &new_status.bots;
 
     // If a geode bot can be built, it is always the best thing to do
     if m > 1 && s.resources >= bp.geo_bot_cost {
         new_status.resources -= &bp.geo_bot_cost;
-        let result = m - 1 + most_geodes(bp, new_status, m-1, mem);
-        mem.insert((s, m), result);
+        let result = m - 1 + most_geodes(bp, &new_status, m-1, mem);
+        mem.insert((s.clone(), m), result);
         return result;
     }
 
@@ -144,7 +144,7 @@ pub fn most_geodes(
     if m > 2 && can_obs {
         new_status.resources -= &bp.obs_bot_cost;
         new_status.bots.obs += 1;
-        result = max(result, most_geodes(bp, new_status, m-1, mem));
+        result = max(result, most_geodes(bp, &new_status, m-1, mem));
         new_status.bots.obs -= 1;
         new_status.resources += &bp.obs_bot_cost;
     }
@@ -152,7 +152,7 @@ pub fn most_geodes(
     if m > 3 && can_cla {
         new_status.resources -= &bp.cla_bot_cost;
         new_status.bots.cla += 1;
-        result = max(result, most_geodes(bp, new_status, m-1, mem));
+        result = max(result, most_geodes(bp, &new_status, m-1, mem));
         new_status.bots.cla -= 1;
         new_status.resources += &bp.cla_bot_cost;
     }
@@ -160,15 +160,15 @@ pub fn most_geodes(
     if m > 4 && can_ore {
         new_status.resources -= &bp.ore_bot_cost;
         new_status.bots.ore += 1;
-        result = max(result, most_geodes(bp, new_status, m-1, mem));
+        result = max(result, most_geodes(bp, &new_status, m-1, mem));
         new_status.bots.ore -= 1;
         new_status.resources += &bp.ore_bot_cost;
     }
 
     if !can_obs || !can_cla || !can_ore {
-        result = max(result, most_geodes(bp, new_status, m-1, mem));
+        result = max(result, most_geodes(bp, &new_status, m-1, mem));
     }
 
-    mem.insert((s, m), result);
+    mem.insert((s.clone(), m), result);
     result
 }
