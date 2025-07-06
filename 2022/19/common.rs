@@ -63,7 +63,7 @@ pub struct Blueprint {
     ore_bot_cost: Stock,
     cla_bot_cost: Stock,
     obs_bot_cost: Stock,
-    geo_bot_cost: Stock
+    geo_bot_cost: Stock,
 }
 
 impl Blueprint {
@@ -118,8 +118,8 @@ pub fn most_geodes(
     bp: &Blueprint,
     s: &Status,
     m: i32,
-    mem: &mut HashMap<(Status, i32), i32>
-) -> i32 {
+    mem: &mut HashMap<(Status, i32), i64>
+) -> i64 {
     if m <= 1 { return 0; }
 
     if let Some(r) = mem.get(&(s.clone(), m)) { return *r; }
@@ -130,16 +130,22 @@ pub fn most_geodes(
     // If a geode bot can be built, it is always the best thing to do
     if m > 1 && s.resources >= bp.geo_bot_cost {
         new_status.resources -= &bp.geo_bot_cost;
-        let result = m - 1 + most_geodes(bp, &new_status, m-1, mem);
+        let result = (m - 1) as i64 + most_geodes(bp, &new_status, m-1, mem);
         mem.insert((s.clone(), m), result);
         return result;
     }
 
     let mut result = 0;
 
-    let can_obs = s.resources >= bp.obs_bot_cost;
-    let can_cla = s.resources >= bp.cla_bot_cost;
-    let can_ore = s.resources >= bp.ore_bot_cost;
+    // The second check is to avoid producing too many bots for each given
+    // type of resource. For example, 5 ore bots will produce more ore
+    // than the factory can ever consume, since all bots cost at most 4 ore.
+    let can_obs = s.resources >= bp.obs_bot_cost &&
+        s.bots.obs < bp.geo_bot_cost.obs;
+    let can_cla = s.resources >= bp.cla_bot_cost &&
+        s.bots.cla < bp.obs_bot_cost.cla;
+    let can_ore = s.resources >= bp.ore_bot_cost &&
+        s.bots.ore < 4;
 
     if m > 2 && can_obs {
         new_status.resources -= &bp.obs_bot_cost;
