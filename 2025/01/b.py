@@ -7,13 +7,7 @@ with fileinput.input() as lines:
 		oldp = p
 		s = 1 if line[0] == "R" else -1
 		p += s * int(line[1:])
-		if p >= 100:
-			d = p // 100
-			c += d
-			p -= d * 100
-		elif p <= 0:
-			d = -p // 100 + 1
-			c += d if oldp != 0 else d-1
-			p = (p + d * 100) % 100
+		c += abs(p) // 100 + (1 if p <= 0 and oldp != 0 else 0)
+		p %= 100
 
 print(c)
