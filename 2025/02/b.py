@@ -21,5 +21,3 @@ with fileinput.input() as lines:
 				if invalid(str(n)):
 					s += n
 print(s)
-				
-
