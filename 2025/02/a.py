@@ -13,5 +13,3 @@ with fileinput.input() as lines:
 					print(n)
 					s += n
 print(s)
-				
-
