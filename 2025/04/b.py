@@ -7,13 +7,14 @@ def neigh(a, i, j):
 		a[i+1][j-1], a[i+1][j], a[i+1][j+1],
 	].count('@')
 
-s = 0
 with fileinput.input() as lines:
-	a = [['.'] * 200]
-	for line in lines:
-		a.append(['.'] + list(line.replace('\n', '.')))
-	a.append(['.'] * 200)
+	a = [
+		['.'] * 200,
+		*[['.'] + list(line.replace('\n', '.')) for line in lines],
+		['.'] * 200,
+	]
 
+s = 0
 rem = True
 while rem:
 	rem = False

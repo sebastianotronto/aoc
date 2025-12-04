@@ -7,13 +7,14 @@ def neigh(a, i, j):
 		a[i+1][j-1], a[i+1][j], a[i+1][j+1],
 	].count('@')
 
-s = 0
 with fileinput.input() as lines:
-	a = [['.'] * 200]
-	for line in lines:
-		a.append(['.'] + list(line.replace('\n', '.')))
-	a.append(['.'] * 200)
+	a = [
+		['.'] * 200,
+		*[['.'] + list(line.replace('\n', '.')) for line in lines],
+		['.'] * 200,
+	]
 
+s = 0
 for i in range(1,len(a)-1):
 	for j in range(1,len(a[1])-1):
 		if a[i][j] == '@' and neigh(a, i, j) < 4:
