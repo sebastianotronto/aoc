@@ -11,6 +11,7 @@ Example
 
 ```
 Day   -Part 1-   -Part 2-
+  4   00:25:36   00:27:49
   3   00:05:02   00:16:09
   2   00:10:36   00:11:55
   1   00:06:20   00:50:41
@@ -49,3 +50,14 @@ For part 2 I used recursion with memorization (using Python's
 `functools.cache`), which is fast enough. But later Chiara pointed
 out to me that actually the solution is quite trivially greedy; I
 implemented the greedy version in `b-alt.py`.
+
+### Day 4: Printing Department
+
+The first "map" problem of the year! This one was easy, but I
+made a lot of mistakes in part 1. I decided to use the trick that
+[Jared](https://guissmo.com) suggested a couple of years ago: extend the
+map by 1 cell in all directions so you don't have to deal with indices
+out of bounds.
+
+For part 2 I decided to quickly code the dumb "repeat part 1 until no
+rolls are removed" strategy and it worked.

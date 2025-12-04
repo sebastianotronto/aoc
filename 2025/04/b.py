@@ -14,8 +14,13 @@ with fileinput.input() as lines:
 		a.append(['.'] + list(line.replace('\n', '.')))
 	a.append(['.'] * 200)
 
-for i in range(1,len(a)-1):
-	for j in range(1,len(a[1])-1):
-		if a[i][j] == '@' and neigh(a, i, j) < 4:
-			s += 1
+rem = True
+while rem:
+	rem = False
+	for i in range(1,len(a)-1):
+		for j in range(1,len(a[1])-1):
+			if a[i][j] == '@' and neigh(a, i, j) < 4:
+				s += 1
+				rem = True
+				a[i][j] = '.'
 print(s)
