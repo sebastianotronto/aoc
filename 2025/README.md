@@ -11,6 +11,7 @@ Example
 
 ```
 Day   -Part 1-   -Part 2-
+  5   00:04:39   00:22:19
   4   00:25:36   00:27:49
   3   00:05:02   00:16:09
   2   00:10:36   00:11:55
@@ -61,3 +62,10 @@ out of bounds.
 
 For part 2 I decided to quickly code the dumb "repeat part 1 until no
 rolls are removed" strategy and it worked.
+
+### Day 5: Cafeteria
+
+Part 2 required a little bit of thinking to handle overlaps correctly
+- at first I wrote a solution that did not handle overlaps, then one
+that can only handle single overlaps, and finally one that works in
+every case. My final solution is quite straightforward.
