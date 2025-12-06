@@ -11,6 +11,7 @@ Example
 
 ```
 Day   -Part 1-   -Part 2-
+  6   00:13:38   01:49:24
   5   00:04:39   00:22:19
   4   00:25:36   00:27:49
   3   00:05:02   00:16:09
@@ -69,3 +70,18 @@ Part 2 required a little bit of thinking to handle overlaps correctly
 - at first I wrote a solution that did not handle overlaps, then one
 that can only handle single overlaps, and finally one that works in
 every case. My final solution is quite straightforward.
+
+### Day 6: Trash Compactor
+
+Part 1 was easy, but I struggled with part 2.
+
+I had to solve this while travelling, which did not help, but that was
+not the main issue. The problem was that for whatever reason my script
+did not copy the whitespaces correctly from the sample input in the web
+page, so I was left wondering how the heck am I supposed to align the
+numbers. After more than an hour and after changing train, I figured out
+the error and I was able to solve this elementary school problem. Much
+smart, very accomplishment.
+
+This year so far the only problems that took me more than 30 minutes
+are this and the first one, not exactly the hardest problems imaginable.
