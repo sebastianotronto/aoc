@@ -13,8 +13,7 @@ with fileinput.input() as lines:
 			a.append([int(x) for x in t if x != ''])
 
 def sol(a, op, i):
-	return (sum(a[j][i] for j in range(len(a))) if op[i] == '+'
-	        else reduce(mul, (a[j][i] for j in range(len(a))), 1))
-	
+	col = [a[j][i] for j in range(len(a))]
+	return sum(col) if op[i] == '+' else reduce(mul, col, 1)
 
 print(sum(sol(a, op, i) for i in range(len(a[0]))))
