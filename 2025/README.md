@@ -11,6 +11,7 @@ Example
 
 ```
 Day   -Part 1-   -Part 2-
+  7   00:05:27   00:20:40
   6   00:13:38   01:49:24
   5   00:04:39   00:22:19
   4   00:25:36   00:27:49
@@ -85,3 +86,13 @@ smart, very accomplishment.
 
 This year so far the only problems that took me more than 30 minutes
 are this and the first one, not exactly the hardest problems imaginable.
+
+### Day 7: Laboratories
+
+This was quite fun! For part 1, I iterate over the rows of the diagram
+keeping a list of the position currently occupied by a tachyon. I use a
+Python set to avoid duplicates. Part 2 is very similar, but the set is
+changed to a map where the keys are the positions and the values are the
+number of multiverses where a tachyon is in that position.  To update
+this value for the current row, I sum the values of all tachyons that
+end there from the previous row (that can be one or two tachyons).
