@@ -2,8 +2,8 @@ import fileinput
 
 with fileinput.input() as lines:
 	rows = [line[:-1] for line in lines]
-	pos = {rows[0].find('S'): 1}
 
+pos = {rows[0].find('S'): 1}
 for row in rows[1:]:
 	newpos = {}
 	for p, w in pos.items():

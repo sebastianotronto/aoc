@@ -2,9 +2,9 @@ import fileinput
 
 with fileinput.input() as lines:
 	rows = [line[:-1] for line in lines]
-	pos = [rows[0].find('S')]
 
 s = 0
+pos = [rows[0].find('S')]
 for row in rows[1:]:
 	newpos = set()
 	for p in pos:

@@ -96,3 +96,7 @@ changed to a map where the keys are the positions and the values are the
 number of multiverses where a tachyon is in that position.  To update
 this value for the current row, I sum the values of all tachyons that
 end there from the previous row (that can be one or two tachyons).
+
+I added a second solution for part 2 that does not use a map, but only
+lists. This could be seen as a dynamic programming problem where the
+iterative implementation is more intuitive than the recursive one.
