@@ -1,7 +1,5 @@
 import fileinput
 
-N = 1000 # Change to 10 for test case
-
 with fileinput.input() as lines:
 	pts = [tuple(int(x) for x in line[:-1].split(',')) for line in lines]
 
@@ -20,13 +18,9 @@ def findrep(i):
 def joinrep(i, j):
 	rep[findrep(i)] = findrep(j)
 
-for i in range(N):
-	j, k = d[i][1], d[i][2]
+for _, j, k in d:
 	if findrep(j) != findrep(k):
 		joinrep(j, k)
+		sol = pts[j][0] * pts[k][0]
 
-sizes = [[0, i] for i in r]
-for i in r:
-	sizes[findrep(i)][0] += 1
-sizes.sort()
-print(sizes[-1][0] * sizes[-2][0] * sizes[-3][0])
+print(sol)

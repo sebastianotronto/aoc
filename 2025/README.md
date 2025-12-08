@@ -11,6 +11,7 @@ Example
 
 ```
 Day   -Part 1-   -Part 2-
+  8   00:29:14   00:33:02
   7   00:05:27   00:20:40
   6   00:13:38   01:49:24
   5   00:04:39   00:22:19
@@ -100,3 +101,14 @@ end there from the previous row (that can be one or two tachyons).
 I added a second solution for part 2 that does not use a map, but only
 lists. This could be seen as a dynamic programming problem where the
 iterative implementation is more intuitive than the recursive one.
+
+### Day 8: Playground
+
+This one required some optimization effort for part 2... unless one is
+already familiar with [the algorithm
+described](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm)
+in the problem statement, and I was from back in the days of competitive
+programming. In the end it was mostly a matter of figuring out the correct
+[data structure to represent the groups of joint
+boxes](https://en.wikipedia.org/wiki/Disjoint-set_data_structure) (or
+a matter of remembering how it is implemented, if one already knows it).
