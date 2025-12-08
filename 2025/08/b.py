@@ -5,7 +5,9 @@ class SetJoin:
 		self._parent = [i for i in range(n)]
 
 	def rep(self, i):
-		return i if self._parent[i] == i else self.rep(self._parent[i])
+		if self._parent[i] != i:
+			self._parent[i] = self.rep(self._parent[i])
+		return self._parent[i]
 
 	def join(self, i, j):
 		self._parent[self.rep(i)] = self.rep(j)
