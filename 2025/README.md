@@ -11,6 +11,7 @@ Example
 
 ```
 Day   -Part 1-   -Part 2-
+  9   00:05:05   02:11:41
   8   00:29:14   00:33:02
   7   00:05:27   00:20:40
   6   00:13:38   01:49:24
@@ -112,3 +113,38 @@ programming. In the end it was mostly a matter of figuring out the correct
 [data structure to represent the groups of joint
 boxes](https://en.wikipedia.org/wiki/Disjoint-set_data_structure) (or
 a matter of remembering how it is implemented, if one already knows it).
+
+### Day 9: Movie Theater
+
+For me this was the first challenging problem (at least excluding those
+that were challenging because of mis-read the problem statement or
+because of sneaky bugs).
+
+Part 1 was easy as usual. For part 2 we go through every pair of
+corners and we check if the rectangle between them is admissible. A
+rectangle is admissible if none of the line segments that make up the
+figure "breaks" it. Breaking a rectangle means that either the lines is
+internal to it (and thus the points on one of the sides of the line are
+invalid but inside the rectangle) or that the line overlaps (at least
+in part) with one of the sides of the rectangle, and the exterior of
+the figure is in the rectangle. To know which side of the line is the
+interior and which is the exterior, I do some pre-processing to compute
+if our border winds clockwise or counter-clockwise (using the [cross
+product](https://en.wikipedia.org/wiki/Cross_product)).  It may be that
+every input has clockwise-winding border, but it was not much work to
+implement this pre-processing.
+
+My implementation of the function that checks if a line breaks the
+rectangle looks like a bunch of very smart Math, but don't think I am
+smart enough to write it on the first try: first I wrote it in 4 separate
+cases (line is vertical / horizontal, t is positive or negative) and
+then I merged the cases together removing the duplication. And I did
+not merge the cases together to look smart, I did it because it made
+debugging easier (did you think my code worked on the first try? ahah).
+
+This algorithm is O(n^3) and runs in about 6 seconds on my small laptop
+(or in about 4 seconds on my desktop). I was not sure O(n^3) was enough,
+and in fact I wasted a lot of time searching a quadratic or O(n^2log n)
+solution before I focused on formalizing a cubic one. The problem is that
+I did not have smaller inputs to try my code against, so I this solution
+was too slow I did not have any way to check that it was at least correct.
