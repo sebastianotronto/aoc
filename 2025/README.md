@@ -148,3 +148,28 @@ and in fact I wasted a lot of time searching a quadratic or O(n^2log n)
 solution before I focused on formalizing a cubic one. The problem is that
 I did not have smaller inputs to try my code against, so I this solution
 was too slow I did not have any way to check that it was at least correct.
+
+EDIT (about 12h after solving part 2): apparently my algorithm is not
+entirely correct. In particular, it can fail by selecting a rectangle
+that is completely external to the figure and none of whose sides overlaps
+any of the lines.
+
+For example with this input:
+
+```
+101,51
+101,0
+0,0
+0,2
+1,2
+1,1
+100,1
+100,50
+99,50
+99,51
+101,51
+```
+
+The first version of my program return 4851 instead of 202. I added a
+check for this case in `b-fixed.py`, hopefully it works in 100% of the
+cases now.
