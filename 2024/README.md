@@ -37,6 +37,10 @@ To run the first part with the downloaded input file. You can also use
 the test case into your terminal; press Ctrl-D to enter and EOF and
 terminate the input.
 
+*Note: I have been told that I should not check in the input files in my
+public repository, so I have removed them. To run my solutions using the
+Makefiles you should download your own input file and call it `input`.*
+
 For second part you can edit the file `dayNNb.cpp` and run `make btest`
 and `make brun`.
 
