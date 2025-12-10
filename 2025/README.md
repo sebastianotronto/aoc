@@ -178,4 +178,38 @@ cases now.
 ### Day 10: Factory
 
 Phew, this was a hard one!
-(More details coming soon, for now read the code and the comments)
+
+Part 1 was quite easy, I just try all combinations of button presses
+until one works. It still took me relatively long to type it out.
+
+Part 2 was hard. Maybe not as hard to come up with as Day 9, but it
+took me much longer to thing through and type the complete solution.
+It is the first problem of this year's edition that I cannot fully solve
+before going to work (problems come out at 6AM in my time zone).
+
+So at first I tried to implement a recursive solution with memoization
+(using Python's
+[`functools.cache`](https://docs.python.org/3/library/functools.html#functools.cache)), but that was too slow. You can still check it out
+in `10/b-recursive-slow.py`.
+
+Then I thought about using linear algebra. I also had other ideas,
+but one particular sentence in the problem's statement strongly hints
+at that: *"You have to push each button an integer number of times;
+there's no such thing as "0.5 presses" (nor can you push a button a
+negative number of times)."*
+
+Like, come on. This sentence makes no sense at all in the context
+of this problem. It is only useful if you are already thinking about
+using linear algebra to solve this, but somehow along your reasoning
+you forgot that you are working with non-negative integers?
+
+Anyway, I briefly tried using [numpy's linear system
+solver](https://numpy.org/doc/stable/reference/generated/numpy.linalg.solve.html),
+but it would have been more complicated to figure out how to use this
+library in my case than to re-implement the necessary algorithms from
+scratch. And so I rolled up my sleeves and started coding... after all,
+it is not the first time I have to home-cook some linear algebra for an
+AoC problem (see `../2023/24/24b.c`).
+
+This time I left some comments in the code, so check out `10/b.py` if
+you want to know the details.
