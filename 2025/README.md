@@ -11,6 +11,7 @@ Example
 
 ```
 Day   -Part 1-   -Part 2-
+ 10   00:27:43   11:51:51
   9   00:05:05   02:11:41
   8   00:29:14   00:33:02
   7   00:05:27   00:20:40
@@ -173,3 +174,8 @@ For example with this input:
 The first version of my program return 4851 instead of 202. I added a
 check for this case in `b-fixed.py`, hopefully it works in 100% of the
 cases now.
+
+### Day 10: Factory
+
+Phew, this was a hard one!
+(More details coming soon, for now read the code and the comments)
