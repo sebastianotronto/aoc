@@ -11,6 +11,7 @@ Example
 
 ```
 Day   -Part 1-   -Part 2-
+ 11   00:14:22   00:21:19
  10   00:27:43   11:51:51
   9   00:05:05   02:11:41
   8   00:29:14   00:33:02
@@ -213,3 +214,16 @@ AoC problem (see `../2023/24/24b.c`).
 
 This time I left some comments in the code, so check out `10/b.py` if
 you want to know the details.
+
+### Day 11: Reactor
+
+This is very easy, at least if you have ever worked with graphs. For
+part 1I have implemented a recursive function `np(v)` that counts the
+number of paths from a node `v` to `out`: it returns 1 if `v == out`,
+or the sum of `np(w)` for all neighbors `w` of `v` otherwise.
+
+For part 2 the function takes 2 extra parameters that denote whether
+or not we have passed through the two required intermediate nodes.
+
+The paths in part 1 are small enough that memoization is not required,
+but in part 2 we need to cache the intermediate results.
