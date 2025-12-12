@@ -11,6 +11,7 @@ Example
 
 ```
 Day   -Part 1-   -Part 2-
+ 12   00:58:32   00:58:36
  11   00:14:22   00:21:19
  10   00:27:43   11:51:51
   9   00:05:05   02:11:41
@@ -227,3 +228,17 @@ or not we have passed through the two required intermediate nodes.
 
 The paths in part 1 are small enough that memoization is not required,
 but in part 2 we need to cache the intermediate results.
+
+## Day 12: Christmas Tree Farm
+
+This problem is literally a prank, I did not like it. I feel bad for the
+people who actually try to solve it.
+
+The actual problem of trying to fit all the presents optimally is
+impossible. Maybe you can come up with an algorithm that works in theory,
+but it's the kind of thing that won't finish until the starvation of
+the last star in the galaxy or stuff like that.
+
+But you can try some simple heuristics, like: if I could chop the presents
+in 1x1 pieces, would they fit? Of course this condition is only necessary,
+and never sufficient... unless you are being pranked. Like in this case.
